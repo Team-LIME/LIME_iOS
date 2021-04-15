@@ -5,6 +5,8 @@ import ArgumentParser
 // An outer structure to hold all commands and sub-commands handled by this script.
 struct SwiftScript: ParsableCommand {
 
+    static let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImV1bjM2NzM5QGdtYWlsLmNvbSIsImlhdCI6MTYxODQxMTI5MSwiZXhwIjoxNjE4ODQzMjkxLCJpc3MiOiJ5b3VuZ2V1bjEyMzQiLCJzdWIiOiJ5b3VuZ2V1bjEyMzQifQ.1zD13wth1a1CEFf-32NYcUMW3TQj-qRRXzXYagCeceA"
+    
     static var configuration = CommandConfiguration(
             abstract: """
         A swift-based utility for performing Apollo-related tasks.
@@ -25,7 +27,7 @@ struct SwiftScript: ParsableCommand {
             
             // Set up the URL you want to use to download the project
             // TODO: Replace the placeholder with the GraphQL endpoint you're using to download the schema.
-            let endpoint = URL(string: "http://localhost:8080/graphql")!
+            let endpoint = URL(string: "http://localhost:3000/graphql")!
             
             
             // Calculate where you want to create the folder where the schema will be downloaded by the ApolloCodegenLib framework.
@@ -38,6 +40,7 @@ struct SwiftScript: ParsableCommand {
             
             // Create an options object for downloading the schema. Provided code will download the schema via an introspection query to the provided URL as JSON to a file called "schema.json". For full options check out https://www.apollographql.com/docs/ios/api/ApolloCodegenLib/structs/ApolloSchemaOptions/
             let schemaDownloadOptions = ApolloSchemaOptions(downloadMethod: .introspection(endpointURL: endpoint),
+                                                            headers: ["x-access-token: \(token)"],
                                                             outputFolderURL: folderForDownloadedSchema)
             
             // Actually attempt to download the schema.
