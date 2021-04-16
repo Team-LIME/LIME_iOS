@@ -5,7 +5,7 @@ import ArgumentParser
 // An outer structure to hold all commands and sub-commands handled by this script.
 struct SwiftScript: ParsableCommand {
 
-    static let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImV1bjM2NzM5QGdtYWlsLmNvbSIsImlhdCI6MTYxODQxMTI5MSwiZXhwIjoxNjE4ODQzMjkxLCJpc3MiOiJ5b3VuZ2V1bjEyMzQiLCJzdWIiOiJ5b3VuZ2V1bjEyMzQifQ.1zD13wth1a1CEFf-32NYcUMW3TQj-qRRXzXYagCeceA"
+    static let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imhha21vaW5AZGdzdy5ocy5rciIsImlhdCI6MTYxODQ4MDYzOCwiZXhwIjoxNjE4OTEyNjM4LCJpc3MiOiJsaW1lIiwic3ViIjoidG9rZW4ifQ.b6QhkVf2V3eeBuKz5KU2gSS6MyDoU-lZiQM5LN8R7ps"
     
     static var configuration = CommandConfiguration(
             abstract: """
@@ -27,7 +27,7 @@ struct SwiftScript: ParsableCommand {
             
             // Set up the URL you want to use to download the project
             // TODO: Replace the placeholder with the GraphQL endpoint you're using to download the schema.
-            let endpoint = URL(string: "http://localhost:3000/graphql")!
+            let endpoint = URL(string: "http://10.80.163.135:3000/graphql")!
             
             
             // Calculate where you want to create the folder where the schema will be downloaded by the ApolloCodegenLib framework.
