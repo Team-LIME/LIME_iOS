@@ -9,5 +9,11 @@ import UIKit
 import RxSwift
 
 class ViewController: UIViewController {
-    var disposeBag = DisposeBag()   
+    var disposeBag = DisposeBag()
+    
+    override func viewDidLoad() {
+        bind()
+    }
+    
+    func bind() { }
 }

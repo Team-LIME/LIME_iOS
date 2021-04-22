@@ -11,6 +11,7 @@ import ReactorKit
 import Apollo
 
 class GraphQLRepository {
+    static let shared = GraphQLRepository()
     func fetchUsersViewData() -> (success: Observable<UsersQuery.Data?>, error: Observable<Void>) {
         return fetch(query: UsersQuery())
     }

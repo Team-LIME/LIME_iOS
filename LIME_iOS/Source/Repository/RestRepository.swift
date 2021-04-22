@@ -12,19 +12,15 @@ import Foundation
 import RxMoya
 
 class RestRepository {
-    private let provider = MoyaProvider<AuthAPI>(plugins: [NetworkLoggerPlugin()])
-    private let decoder = JSONDecoder()
+    static let shared = RestRepository()
     
-    private let authAPI: AuthAPI
-    private let authLocal: AuthLocal
+    private lazy var decoder = JSONDecoder()
     
-    init(authAPI: AuthAPI, authLocal: AuthLocal) {
-        self.authAPI = authAPI
-        self.authLocal = authLocal
-    }
+    private lazy var authProvider = MoyaProvider<AuthAPI>(plugins: [NetworkLoggerPlugin()])
+    private lazy var authLocal = AuthLocal()
     
     func login(_ request: LoginRequest) -> Single<Void> {
-        return provider.rx.request(.postLogin(request))
+        return authProvider.rx.request(.postLogin(request))
             .map(Response<LoginResponse>.self, using: decoder)
             .withUnretained(self)
             .flatMap { owner, element in
@@ -33,7 +29,7 @@ class RestRepository {
     }
     
     func register(_ request: RegisterRequest) -> Single<Void> {
-        return provider.rx.request(.postRegister(request))
+        return authProvider.rx.request(.postRegister(request))
             .map(Response<RegisterResponse>.self, using: decoder)
             .map { _ in Void() }
     }
