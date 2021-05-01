@@ -1,6 +1,14 @@
 
-# Created by https://www.toptal.com/developers/gitignore/api/xcode,macos,swift,cocoapods,swiftpackagemanager
-# Edit at https://www.toptal.com/developers/gitignore?templates=xcode,macos,swift,cocoapods,swiftpackagemanager
+# Created by https://www.toptal.com/developers/gitignore/api/swift,xcode,cocoapods,carthage,macos
+# Edit at https://www.toptal.com/developers/gitignore?templates=swift,xcode,cocoapods,carthage,macos
+
+### Carthage ###
+# Carthage
+#
+# Add this line if you want to avoid checking in source code from Carthage dependencies.
+# Carthage/Checkouts
+
+Carthage/Build
 
 ### CocoaPods ###
 ## CocoaPods GitIgnore Template
@@ -41,7 +49,6 @@ Temporary Items
 
 ### Swift ###
 # Xcode
-#
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
 ## User settings
@@ -123,12 +130,6 @@ fastlane/test_output
 
 iOSInjectionProject/
 
-### SwiftPackageManager ###
-Packages
-xcuserdata
-*.xcodeproj
-
-
 ### Xcode ###
 # Xcode
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
@@ -146,8 +147,4 @@ xcuserdata
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
 
-# End of https://www.toptal.com/developers/gitignore/api/xcode,macos,swift,cocoapods,swiftpackagemanager
-
-## ETC
-LIME_iOS/Resource/GraphQL/
-
+# End of https://www.toptal.com/developers/gitignore/api/swift,xcode,cocoapods,carthage,macos
