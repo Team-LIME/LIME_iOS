@@ -1,0 +1,10 @@
+query ChatRooms {
+  getChatRooms {
+    _id
+    participants{
+      profileImages
+    }
+    name
+    type
+  }
+}
