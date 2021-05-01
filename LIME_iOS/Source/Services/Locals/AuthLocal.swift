@@ -36,5 +36,22 @@ class AuthLocal: LIME_iOS.Local {
             return Disposables.create()
         }
     }
+    
+    func getToken() -> Single<TokenEntity> {
+        return Single<TokenEntity>.create { [weak self] single in
+            guard let self = self else {
+                single(.error(LimeError.error(message: "토큰 조회 실패", keys: [.retry])))
+                return Disposables.create()
+            }
+            let data = self.realm.objects(TokenEntity.self)
+            if(data.isEmpty){
+                single(.error(LimeError.error(message: "토큰 조회 실패", keys: [.retry])))
+            }else{
+                single(.success(data.first!))
+            }
+
+            return Disposables.create()
+        }
+    }
 
 }

@@ -18,12 +18,12 @@ class RegisterRequest: Encodable {
          name: String,
          intro: String,
          generation: Int,
-         type: String){
+         type: UserTypeEnum){
         self.email = email
         self.pw = pw
         self.name = name
         self.intro = intro
         self.generation = generation
-        self.type = type
+        self.type = type.rawValue
     }
 }

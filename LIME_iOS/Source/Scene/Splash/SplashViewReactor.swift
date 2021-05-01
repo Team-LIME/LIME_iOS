@@ -1,51 +1,52 @@
 //
-//  LoginViewReactor.swift
+//  SplashViewReactor.swift
 //  LIME_iOS
 //
-//  Created by 이영은 on 2021/04/15.
+//  Created by 이영은 on 2021/04/29.
 //
 
 import ReactorKit
 import RxSwift
 import RxCocoa
 
-class LoginViewReactor: Reactor {
+class SplashViewReactor: Reactor {
     var initialState: State
+    
     lazy var restRepository = RestRepository.shared
     
     init() {
-        self.initialState = State(isSuccessLogin: false,
+        self.initialState = State(isTokenActive: false,
                                   isLoading: false)
+        
     }
     
     enum Action {
-        case login(_ email: String, _ pw: String)
+        case refresh
     }
     
     enum Mutation {
-        case setSuccessLogin(Bool)
+        case setIsTokenActive(Bool)
         case setLoading(Bool)
         case setError(Error)
         case non
     }
     
     struct State {
-        var isSuccessLogin: Bool
+        var isTokenActive: Bool
         var isLoading: Bool
         var errorMessage: String?
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-            case let .login(email, pw):
+            case .refresh:
                 return Observable.concat([
                     .just(Mutation.setLoading(true)),
-                     validate(.login(email, pw)),
-                    restRepository.login(LoginRequest(email: email, pw: pw))
+                    restRepository.fetchTokenStatus()
                         .asObservable()
-                        .map { Mutation.setSuccessLogin(true) },
-                    .just(Mutation.setLoading(false)),
-                ]).catchError{ .just(Mutation.setError($0)) }
+                        .map { Mutation.setIsTokenActive($0) },
+                    .just(Mutation.setLoading(false))
+                ])
         }
     }
     
@@ -53,8 +54,8 @@ class LoginViewReactor: Reactor {
         var state = state
         state.errorMessage = nil
         switch mutation {
-            case let .setSuccessLogin(isSuccessLogin):
-                state.isSuccessLogin = isSuccessLogin
+            case let .setIsTokenActive(isTokenActive):
+                state.isTokenActive = isTokenActive
             case let .setLoading(isLoading):
                 state.isLoading = isLoading
             case let .setError(error):
@@ -65,25 +66,12 @@ class LoginViewReactor: Reactor {
                     state.errorMessage = "알수없는 오류가 발생했습니다 : \(error.localizedDescription)"
                 }
                 state.isLoading = false
-                state.isSuccessLogin = false
+                state.isTokenActive = false
             case .non: break
         }
         return state
     }
 }
 
-extension LoginViewReactor {
-    private func validate(_ action: Action) -> Observable<Mutation> {
-        switch action {
-            case let .login(email, pw):
-                if(email.isEmpty) {
-                    return .error(LimeError.error(message: "아이디를 입력해 주세요."))
-                } else if(pw.isEmpty) {
-                    return .error(LimeError.error(message: "비밀번호를 입력해 주세요."))
-                }
-        }
-        return Observable.just(Void()).map{ Mutation.non }
-    }
-}
 
 

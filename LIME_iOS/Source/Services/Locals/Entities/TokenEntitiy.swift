@@ -9,9 +9,13 @@ import Foundation
 import RealmSwift
 
 class TokenEntity: Object {
-    @objc dynamic var token: String
+    @objc dynamic var token: String = ""
     
     init(token: String){
         self.token = token
+    }
+    
+    override init(){
+        super.init()
     }
 }
