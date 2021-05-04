@@ -20,7 +20,7 @@ class RegisterRequest: Encodable {
          generation: Int,
          type: UserTypeEnum){
         self.email = email
-        self.pw = pw
+        self.pw = pw.sha512()
         self.name = name
         self.intro = intro
         self.generation = generation

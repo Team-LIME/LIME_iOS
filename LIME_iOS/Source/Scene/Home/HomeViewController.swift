@@ -10,7 +10,7 @@ import Then
 import SnapKit
 import ReactorKit
 
-class HomeViewController: LIME_iOS.ViewController, View {
+class HomeViewController: LIME_iOS.UIViewController, View {
     typealias Reactor = HomeViewReactor
     
     // MARK: - Object lifecycle
@@ -25,12 +25,14 @@ class HomeViewController: LIME_iOS.ViewController, View {
         setup()
     }
     
+    
     //MARK: - Setup
     
     private func setup(){
         reactor = HomeViewReactor()
     }
         
+    
     //MARK: - UI
     
     
@@ -53,10 +55,5 @@ class HomeViewController: LIME_iOS.ViewController, View {
         reactor.state.map{ $0.errorMessage }
             .bind(to: self.view.rx.toastMessage)
             .disposed(by: disposeBag)
-    }
-    
-    //MARK: - Binding UI
-    override func bind() {
-        
     }
 }

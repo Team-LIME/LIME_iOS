@@ -32,7 +32,7 @@ class RestRepository {
     //MARK: - 회원가입
     func register(_ request: RegisterRequest) -> Single<Void> {
         return authProvider.rx.request(.postRegister(request))
-            .map(Response<RegisterResponse>.self, using: decoder)
+            .map(MessageResponse.self, using: decoder)
             .map { _ in Void() }
     }
     

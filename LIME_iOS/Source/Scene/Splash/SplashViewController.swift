@@ -10,7 +10,7 @@ import Then
 import SnapKit
 import ReactorKit
 
-class SplashViewController: LIME_iOS.ViewController, View {
+class SplashViewController: LIME_iOS.UIViewController, View {
     typealias Reactor = SplashViewReactor
     
     // MARK: - Object lifecycle
@@ -25,15 +25,20 @@ class SplashViewController: LIME_iOS.ViewController, View {
         setup()
     }
     
+    
     //MARK: - Setup
     
     private func setup(){
         reactor = SplashViewReactor()
     }
         
+    
     //MARK: - UI
     
-    private func routeToWelcomeView(){
+    
+    //MARK: - Rout to Another VC
+    
+    private func routeToWelcomeView() {
         DispatchQueue.main.async {
             let destinationVC = UINavigationController(rootViewController: WelcomeViewController()).then {
                 $0.modalPresentationStyle = .fullScreen
@@ -42,7 +47,7 @@ class SplashViewController: LIME_iOS.ViewController, View {
         }
     }
     
-    private func routeToHomeView(){
+    private func routeToHomeView() {
         DispatchQueue.main.async {
             let destinationVC = UINavigationController(rootViewController: HomeViewController()).then {
                 $0.modalPresentationStyle = .fullScreen
@@ -57,16 +62,16 @@ class SplashViewController: LIME_iOS.ViewController, View {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        view.backgroundColor = .red
-        
         Observable.just(.refresh)
             .bind(to: reactor!.action)
             .disposed(by: disposeBag)
     }
     
+    
     //MARK: - Binding Data
+    
     func bind(reactor: SplashViewReactor) {
+        //Output
         reactor.state.map { $0.isTokenActive }
             .distinctUntilChanged()
             .subscribe(onNext: { [weak self] isTokenActive in
@@ -91,13 +96,9 @@ class SplashViewController: LIME_iOS.ViewController, View {
                 }
             }).disposed(by: disposeBag)
         
+        //Error
         reactor.state.map{ $0.errorMessage }
             .bind(to: self.view.rx.toastMessage)
             .disposed(by: disposeBag)
-    }
-    
-    //MARK: - Binding UI
-    override func bind() {
-        
     }
 }

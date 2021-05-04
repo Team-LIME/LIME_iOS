@@ -20,9 +20,9 @@ class RegisterViewReactor: Reactor {
     }
     
     enum Action {
-        case register(_ email: String, _ pw: String,
-                      _ name: String, _ intro: String,
-                      _ generation: String, _ type: UserTypeEnum)
+        case register(email: String, pw: String,
+                      name: String, intro: String,
+                      generation: Int, type: UserTypeEnum)
     }
     
     enum Mutation {
@@ -43,12 +43,11 @@ class RegisterViewReactor: Reactor {
             case let .register(email, pw, name, intro, generation, type):
                 return Observable.concat([
                     .just(Mutation.setLoading(true)),
-                    validate(.register(email, pw, name, intro, generation, type)),
                     restRepository.register(RegisterRequest(email: email,
                                                             pw: pw,
                                                             name: name,
                                                             intro: intro,
-                                                            generation: Int(generation) ?? 0,
+                                                            generation: generation,
                                                             type: type))
                         .asObservable()
                         .map { Mutation.setSuccessRegister(true) },
@@ -77,27 +76,5 @@ class RegisterViewReactor: Reactor {
             case .non: break
         }
         return state
-    }
-}
-
-extension RegisterViewReactor {
-    private func validate(_ action: Action) -> Observable<Mutation> {
-        switch action {
-            case let .register(email, pw, name, intro, generation, _):
-                if(email.isEmpty) {
-                    return .error(LimeError.error(message: "아이디를 입력해 주세요."))
-                } else if(pw.isEmpty) {
-                    return .error(LimeError.error(message: "비밀번호를 입력해 주세요."))
-                } else if(name.isEmpty) {
-                    return .error(LimeError.error(message: "이름을 입력해 주세요."))
-                } else if(intro.isEmpty) {
-                    return .error(LimeError.error(message: "한줄소개를 입력해 주세요."))
-                } else if(generation.isEmpty) {
-                    return .error(LimeError.error(message: "기수를 입력해 주세요."))
-                } else if(generation.isValidNmber()) {
-                    return .error(LimeError.error(message: "올바른 기수를 입력해 주세요."))
-                }
-        }
-        return Observable.just(Void()).map{ Mutation.non }
     }
 }

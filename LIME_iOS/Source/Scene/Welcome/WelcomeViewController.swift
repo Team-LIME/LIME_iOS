@@ -9,7 +9,7 @@ import UIKit
 import Then
 import SnapKit
 
-class WelcomeViewController: LIME_iOS.ViewController {
+class WelcomeViewController: LIME_iOS.UIViewController {
     
     //MARK: - UI
     
@@ -22,13 +22,13 @@ class WelcomeViewController: LIME_iOS.ViewController {
         $0.layer.borderColor = UIColor.systemGray.cgColor
         $0.addGestureRecognizer(UITapGestureRecognizer(target: self, action:  #selector (onClickRegisterBtn)))
     }
-    
     lazy var loginBtn = UIButton().then {
         $0.setTitle("로그인", for: .normal)
         $0.backgroundColor = .systemGreen
         $0.layer.cornerRadius = 5.0
         $0.addGestureRecognizer(UITapGestureRecognizer(target: self, action:  #selector (onClickLoginBtn)))
     }
+    
     
     //MARK: - receive events from UI
     
@@ -42,6 +42,7 @@ class WelcomeViewController: LIME_iOS.ViewController {
         self.navigationController?.pushViewController(RegisterViewController(), animated: true)
     }
     
+    
     // MARK: - View lifecycle
         
     override func viewDidLoad() {
@@ -53,14 +54,14 @@ class WelcomeViewController: LIME_iOS.ViewController {
         view.addSubview(loginBtn)
         
         registerBtn.snp.makeConstraints {
-            $0.height.equalTo(55)
+            $0.height.equalTo(50)
             $0.right.equalTo(view.safeAreaLayoutGuide).inset(20)
             $0.left.equalTo(view.safeAreaLayoutGuide).inset(20)
             $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
         }
         
         loginBtn.snp.makeConstraints {
-            $0.height.equalTo(55)
+            $0.height.equalTo(50)
             $0.right.equalTo(registerBtn)
             $0.left.equalTo(registerBtn)
             $0.bottom.equalTo(registerBtn.snp.top).offset(-10)
@@ -76,5 +77,4 @@ class WelcomeViewController: LIME_iOS.ViewController {
         super.viewWillAppear(true)
         navigationController?.setNavigationBarHidden(true, animated: true)
     }
-    
 }

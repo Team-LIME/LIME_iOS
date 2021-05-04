@@ -19,7 +19,7 @@ class LoginViewReactor: Reactor {
     }
     
     enum Action {
-        case login(_ email: String, _ pw: String)
+        case login(email: String, pw: String)
     }
     
     enum Mutation {
@@ -40,7 +40,8 @@ class LoginViewReactor: Reactor {
             case let .login(email, pw):
                 return Observable.concat([
                     .just(Mutation.setLoading(true)),
-                     validate(.login(email, pw)),
+                    chekEmpty(.login(email: email, pw: pw)),
+                    validate(.login(email: email, pw: pw)),
                     restRepository.login(LoginRequest(email: email, pw: pw))
                         .asObservable()
                         .map { Mutation.setSuccessLogin(true) },
@@ -73,13 +74,23 @@ class LoginViewReactor: Reactor {
 }
 
 extension LoginViewReactor {
-    private func validate(_ action: Action) -> Observable<Mutation> {
+    private func chekEmpty(_ action: Action) -> Observable<Mutation> {
         switch action {
             case let .login(email, pw):
                 if(email.isEmpty) {
-                    return .error(LimeError.error(message: "아이디를 입력해 주세요."))
+                    return .error(LimeError.error(message: "이메일을 입력해 주세요."))
                 } else if(pw.isEmpty) {
                     return .error(LimeError.error(message: "비밀번호를 입력해 주세요."))
+                }
+        }
+        return Observable.just(Void()).map{ Mutation.non }
+    }
+    
+    private func validate(_ action: Action) -> Observable<Mutation> {
+        switch action {
+            case let .login(email, _    ):
+                if(!email.isValidEmail()) {
+                    return .error(LimeError.error(message: "올바른 이메일을 입력해 주세요."))
                 }
         }
         return Observable.just(Void()).map{ Mutation.non }

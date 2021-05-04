@@ -72,6 +72,3 @@ class SplashViewReactor: Reactor {
         return state
     }
 }
-
-
-

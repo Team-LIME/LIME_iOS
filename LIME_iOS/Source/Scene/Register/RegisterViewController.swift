@@ -10,98 +10,155 @@ import Then
 import SnapKit
 import ReactorKit
 
-class RegisterViewController: LIME_iOS.ViewController, View {
+class RegisterViewController: RegisterInputViewController<UserTypeEnum>, View {
     typealias Reactor = RegisterViewReactor
+    
+    // MARK: - properties
+    
+    lazy var emailInputViewController = RegisterInputViewController<String>(inputType: .email,
+                                                                            onClickButtonEvent: { email in
+                                                                                self.email = email ?? ""
+                                                                                self.routeToPwInputView()
+                                                                            })
+
+    lazy var pwInputViewController = RegisterInputViewController<String>(inputType: .pw,
+                                                                         onClickButtonEvent: { pw in
+                                                                            self.pw = pw ?? ""
+                                                                            self.routeToNameInputView()
+                                                                         })
+
+    lazy var nameInputViewController = RegisterInputViewController<String>(inputType: .name,
+                                                                           onClickButtonEvent: { name in
+                                                                            self.name = name ?? ""
+                                                                            self.routeToIntroInputView()
+                                                                           })
+
+    lazy var introInputViewController = RegisterInputViewController<String>(inputType: .intro,
+                                                                            onClickButtonEvent: { intro in
+                                                                                self.intro = intro ?? ""
+                                                                                if self.type == .teacher {
+                                                                                    self.registerRequest()
+                                                                                }else {
+                                                                                    self.routeToGenerationInputView()
+                                                                                }
+                                                                            })
+
+    lazy var generationInputViewController = RegisterInputViewController<Int>(inputType: .generation,
+                                                                              onClickButtonEvent: { generation in
+                                                                                self.generation = generation ?? 0
+                                                                                self.registerRequest()
+                                                                              })
+    
+    //MARK: - Propertiess
+    var email: String = ""
+    var pw: String = ""
+    var name: String = ""
+    var intro: String = ""
+    var generation: Int = 0
+    var type: UserTypeEnum = .student
     
     // MARK: - Object lifecycle
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        setup()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        setup()
-    }
-    
-    //MARK: - Setup
-    
-    private func setup(){
+    init() {
+        super.init(inputType: .type) { _ in }
         reactor = RegisterViewReactor()
     }
-        
-    //MARK: - UI
-    
-    lazy var emailField = UITextField().then {
-        $0.keyboardType = .emailAddress
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
-    lazy var pwField = UITextField().then {
-        $0.isSecureTextEntry = true
-        $0.keyboardType = .alphabet
+    //MARK: - Rout to Another VC
+    
+    func routeToEmailInputView(){
+        self.navigationController?.pushViewController(emailInputViewController, animated: true)
+    }
+
+    func routeToPwInputView(){
+        self.navigationController?.pushViewController(pwInputViewController, animated: true)
+    }
+
+    func routeToNameInputView(){
+        self.navigationController?.pushViewController(nameInputViewController, animated: true)
+    }
+
+    func routeToIntroInputView(){
+        self.navigationController?.pushViewController(introInputViewController, animated: true)
+    }
+
+    func routeToGenerationInputView(){
+        self.navigationController?.pushViewController(generationInputViewController, animated: true)
     }
     
-    lazy var nameField = UITextField().then {
-        $0.keyboardType = .default
+    func registerRequest(){
+        Observable.just(.register(email: self.email,
+                                  pw: self.pw,
+                                  name: self.name,
+                                  intro: self.intro,
+                                  generation: self.generation,
+                                  type: self.type))
+            .bind(to: self.reactor!.action)
+            .disposed(by: self.disposeBag)
     }
     
-    lazy var introField = UITextField().then {
-        $0.isSecureTextEntry = true
-        $0.keyboardType = .default
+    func successRegister(){
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: "회원가입에 성공했습니다.", message: "로그인 페이지로 이동합니다.", preferredStyle: .alert)
+            let defaultAction = UIAlertAction(title: "확인", style: .default) { (action) in
+                self.navigationController?.popToRootViewController(animated: true)
+            }
+            alert.addAction(defaultAction)
+            
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
-    lazy var generationField = UITextField().then {
-        $0.isSecureTextEntry = true
-        $0.textContentType = .telephoneNumber
-        $0.keyboardType = .numberPad
-    }
-  
-    //TODO: Type RadioButton 생성 (학생 / 교사)
-//    lazy var typeField = UITextField().then {
-//
-//    }
-    
-    lazy var registerButton = UIButton().then {
-        $0.backgroundColor = .red
-    }
-    
-    // MARK: - View lifecycle
+    //MARK: - View lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        initOnClickButtonEvent(onClickButton: { type in
+            self.type = type ?? .student
+            self.routeToEmailInputView()
+        })
     }
     
     //MARK: - Binding Data
+    
     func bind(reactor: RegisterViewReactor) {
-        reactor.state.map { $0.isLoading }
+        //Output
+        let isLoading = reactor.state.map { $0.isLoading }
             .distinctUntilChanged()
-            .subscribe(onNext: { [weak self] value in
-                guard let self = self else { return }
-                if value {
-                    self.startLoading()
-                }else {
-                    self.stopLoading()
-                }
-
-            }).disposed(by: disposeBag)
+            .share()
+            
+        isLoading
+            .bind(to: self.generationInputViewController.rx.isLoading)
+            .disposed(by: disposeBag)
         
-        reactor.state.map{ $0.errorMessage }
-            .bind(to: self.view.rx.toastMessage)
+        isLoading
+            .bind(to: self.introInputViewController.rx.isLoading)
+            .disposed(by: disposeBag)
+        
+        
+        reactor.state.map { $0.isSuccessRegister }
+            .filter{ $0 }
+            .distinctUntilChanged()
+            .subscribe(onNext: { [weak self] _ in
+                self?.successRegister()
+            })
+            .disposed(by: disposeBag)
+        
+        
+        //Error
+        let error = reactor.state.map{ $0.errorMessage }
+            .share()
+            
+        error
+            .bind(to: self.generationInputViewController.view.rx.toastMessage)
+            .disposed(by: disposeBag)
+        
+        error
+            .bind(to: self.introInputViewController.view.rx.toastMessage)
             .disposed(by: disposeBag)
     }
     
-    //MARK: - Binding UI
-    override func bind() {
-        registerButton.rx.tap
-            .map {.register(self.emailField.text ?? "",
-                            self.pwField.text ?? "",
-                            self.nameField.text ?? "",
-                            self.introField.text ?? "",
-                            self.generationField.text ?? "",
-                            .student)
-                //TODO: Type처리
-            }.bind(to: reactor!.action)
-            .disposed(by: disposeBag)
-    }
 }
