@@ -15,30 +15,18 @@ class SplashViewController: LIME_iOS.UIViewController, View {
     
     // MARK: - Object lifecycle
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        setup()
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        self.reactor = SplashViewReactor()
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        setup()
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
-    
-    
-    //MARK: - Setup
-    
-    private func setup(){
-        reactor = SplashViewReactor()
-    }
-        
-    
-    //MARK: - UI
-    
     
     //MARK: - Rout to Another VC
     
-    private func routeToWelcomeView() {
+    fileprivate func routeToWelcomeView() {
         DispatchQueue.main.async {
             let destinationVC = UINavigationController(rootViewController: WelcomeViewController()).then {
                 $0.modalPresentationStyle = .fullScreen
@@ -47,7 +35,7 @@ class SplashViewController: LIME_iOS.UIViewController, View {
         }
     }
     
-    private func routeToHomeView() {
+    fileprivate func routeToHomeView() {
         DispatchQueue.main.async {
             let destinationVC = UINavigationController(rootViewController: HomeViewController()).then {
                 $0.modalPresentationStyle = .fullScreen
@@ -55,7 +43,6 @@ class SplashViewController: LIME_iOS.UIViewController, View {
             self.present(destinationVC, animated: false)
         }
     }
-    
     
     // MARK: - View lifecycle
     
@@ -67,38 +54,43 @@ class SplashViewController: LIME_iOS.UIViewController, View {
             .disposed(by: disposeBag)
     }
     
-    
-    //MARK: - Binding Data
+    //MARK: - Binding
     
     func bind(reactor: SplashViewReactor) {
         //Output
         reactor.state.map { $0.isTokenActive }
             .distinctUntilChanged()
-            .subscribe(onNext: { [weak self] isTokenActive in
-                guard let self = self else { return }
-                
-                if(isTokenActive) {
-                    self.routeToHomeView()
-                }else{
-                    self.routeToWelcomeView()
-                }
-                
-            }).disposed(by: disposeBag)
+            .bind(to: self.rx.isTokenActive)
+            .disposed(by: disposeBag)
         
         reactor.state.map { $0.isLoading }
             .distinctUntilChanged()
-            .subscribe(onNext: { [weak self] value in
-                guard let self = self else { return }
-                if value {
-                    self.startLoading()
-                }else {
-                    self.stopLoading()
-                }
-            }).disposed(by: disposeBag)
+            .bind(to: self.rx.isLoading)
+            .disposed(by: disposeBag)
         
         //Error
         reactor.state.map{ $0.errorMessage }
             .bind(to: self.view.rx.toastMessage)
             .disposed(by: disposeBag)
     }
+    
+}
+
+
+import RxSwift
+import RxCocoa
+
+extension Reactive where Base: SplashViewController {
+    
+    /// Bindable sink for `startAnimating()`, `stopAnimating()` methods.
+    internal var isTokenActive: Binder<Bool> {
+        return Binder(self.base) { viewcontroller, active in
+            if active {
+                viewcontroller.routeToHomeView()
+            } else {
+                viewcontroller.routeToWelcomeView()
+            }
+        }
+    }
+    
 }

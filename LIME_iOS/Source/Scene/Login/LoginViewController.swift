@@ -15,22 +15,17 @@ class LoginViewController: LIME_iOS.UIViewController, View, UIGestureRecognizerD
     
     // MARK: - Object lifecycle
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        setup()
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        reactor = LoginViewReactor()
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        setup()
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
-
+    
     // MARK: - View lifecycle
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-    }
-    
+   
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -43,6 +38,14 @@ class LoginViewController: LIME_iOS.UIViewController, View, UIGestureRecognizerD
         pwBox.addSubview(pwField)
         
         view.addSubview(loginBtn)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        navigationBarSettings(self, "로그인")
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
     override func setupConstraints() {
@@ -95,17 +98,7 @@ class LoginViewController: LIME_iOS.UIViewController, View, UIGestureRecognizerD
             $0.right.equalTo(pwBox)
         }
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        navigationBarSettings(self, "로그인")
-    }
-    
-    //MARK: - Setup
-    
-    private func setup() {
-        reactor = LoginViewReactor()
-    }
-    
+
     //MARK: - UI
     
     //MARK: Email Input UI
@@ -150,8 +143,7 @@ class LoginViewController: LIME_iOS.UIViewController, View, UIGestureRecognizerD
         $0.titleLabel?.font = .boldSystemFont(ofSize: 16)
     }
     
-        
-    //MARK: - Rout to Another VC
+    //MARK: - Route to Another VC
     
     private func routeToHomeView() {
         DispatchQueue.main.async {
@@ -161,7 +153,6 @@ class LoginViewController: LIME_iOS.UIViewController, View, UIGestureRecognizerD
             self.present(destinationVC, animated: false)
         }
     }
-    
     
     //MARK: - Configuring
     func bind(reactor: LoginViewReactor) {

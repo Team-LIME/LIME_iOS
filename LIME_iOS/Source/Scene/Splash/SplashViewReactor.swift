@@ -59,8 +59,7 @@ class SplashViewReactor: Reactor {
             case let .setLoading(isLoading):
                 state.isLoading = isLoading
             case let .setError(error):
-                if let error = error as? LimeError,
-                   case let .error(message, _, _) = error {
+                if let error = error as? LimeError, case let .error(message, _, _) = error {
                     state.errorMessage = message
                 } else {
                     state.errorMessage = "알수없는 오류가 발생했습니다 : \(error.localizedDescription)"

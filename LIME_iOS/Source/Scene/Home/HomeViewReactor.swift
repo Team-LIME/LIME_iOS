@@ -14,7 +14,6 @@ class HomeViewReactor: Reactor {
     
     init() {
         self.initialState = State(isLoading: false)
-        
     }
     
     enum Action {

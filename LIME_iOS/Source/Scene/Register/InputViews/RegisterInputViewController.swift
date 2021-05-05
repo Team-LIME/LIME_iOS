@@ -19,7 +19,7 @@ enum RegisterInputType {
 }
 
 class RegisterInputViewController<T>: LIME_iOS.UIViewController, UIGestureRecognizerDelegate {
-    struct Constant {
+    fileprivate struct Constant {
         var inputType: RegisterInputType
         var title: String
         var buttonTitle: String
@@ -29,7 +29,7 @@ class RegisterInputViewController<T>: LIME_iOS.UIViewController, UIGestureRecogn
         var isSecureTextEntry: Bool
     }
     
-    //MARK: Initializing
+    //MARK: - Object lifecycle
     init(inputType: RegisterInputType, onClickButtonEvent: @escaping (T?) -> Void) {
         
         switch inputType {
@@ -100,10 +100,9 @@ class RegisterInputViewController<T>: LIME_iOS.UIViewController, UIGestureRecogn
         self.onClickButton = onClickButton
     }
     
-    
     // MARK: - Properties
     
-    var constant: Constant
+    fileprivate var constant: Constant
     fileprivate var onClickButton: (T?) -> Void
     
     //MARK: - UI
@@ -235,7 +234,7 @@ class RegisterInputViewController<T>: LIME_iOS.UIViewController, UIGestureRecogn
         }
     }
     
-    //MARK: - Configuring
+    //MARK: - Binding
     
     func bind() {
         self.nextButton.rx.tap
@@ -318,15 +317,14 @@ extension RegisterInputViewController {
 //MARK: - Keyboard Show/Hide Observer
 extension RegisterInputViewController {
     private func addKeyboardNotification() {
+        
+        //MARK: keyboard Will Show Notification
         NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { notification in
             guard let keybordFrm = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
             
             var safeBot: CGFloat = 0
             if let uBot = UIApplication.shared.windows.first?.safeAreaInsets.bottom { safeBot = uBot }
             let newHeight: CGFloat = keybordFrm.height - safeBot
-            
-            print("키보드 올라옴")
-            
             self.nextButton.snp.removeConstraints()
             
             self.nextButton.snp.makeConstraints {
@@ -338,9 +336,8 @@ extension RegisterInputViewController {
             self.updateViewConstraints()
         }
         
+        //MARK: keyboard Will Hide Notification
         NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { notification in
-            print("내려감")
-            
             self.nextButton.snp.removeConstraints()
             self.nextButton.snp.makeConstraints {
                 $0.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(10)

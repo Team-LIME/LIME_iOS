@@ -20,39 +20,49 @@ class WelcomeViewController: LIME_iOS.UIViewController {
         $0.layer.borderWidth = 0.5
         $0.setTitleColor(.systemGray, for: .normal)
         $0.layer.borderColor = UIColor.systemGray.cgColor
-        $0.addGestureRecognizer(UITapGestureRecognizer(target: self, action:  #selector (onClickRegisterBtn)))
     }
     lazy var loginBtn = UIButton().then {
         $0.setTitle("로그인", for: .normal)
         $0.backgroundColor = .systemGreen
         $0.layer.cornerRadius = 5.0
-        $0.addGestureRecognizer(UITapGestureRecognizer(target: self, action:  #selector (onClickLoginBtn)))
     }
     
+    //MARK: - route To Another VC
     
-    //MARK: - receive events from UI
-    
-    @objc
-    func onClickLoginBtn() {
-        self.navigationController?.pushViewController(LoginViewController(), animated: true)
+    func routeToLoginViewController() {
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(LoginViewController(), animated: true)
+        }
     }
     
-    @objc
-    func onClickRegisterBtn() {
-        self.navigationController?.pushViewController(RegisterViewController(), animated: true)
+    func routeToRegisterViewController() {
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(RegisterViewController(), animated: true)
+        }
     }
-    
     
     // MARK: - View lifecycle
         
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
-        
         view.addSubview(registerBtn)
         view.addSubview(loginBtn)
         
+        bind()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+    
+    override func setupConstraints() {
         registerBtn.snp.makeConstraints {
             $0.height.equalTo(50)
             $0.right.equalTo(view.safeAreaLayoutGuide).inset(20)
@@ -68,13 +78,16 @@ class WelcomeViewController: LIME_iOS.UIViewController {
         }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(true)
-        navigationController?.setNavigationBarHidden(false, animated: false)
+    //MARK: - Binding
+    
+    private func bind() {
+        loginBtn.rx.tap
+            .subscribe(onNext: { self.routeToLoginViewController() })
+            .disposed(by: disposeBag)
+        
+        registerBtn.rx.tap
+            .subscribe(onNext: { self.routeToRegisterViewController() })
+            .disposed(by: disposeBag)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        navigationController?.setNavigationBarHidden(true, animated: true)
-    }
 }

@@ -9,7 +9,7 @@ import RxSwift
 import RealmSwift
 
 class AuthLocal: LIME_iOS.Local {
-    lazy var realm: Realm! = getReam()
+    lazy var realm: Realm! = getReam() // keychain why? more high security를 보장해야한다. == 키체인말고는 답이 없다
     
     func saveToken(_ tokenEntity: TokenEntity?) -> Single<Void> {
         return Single<Void>.create { [weak self] single in

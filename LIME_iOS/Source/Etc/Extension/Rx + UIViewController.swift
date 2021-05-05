@@ -10,7 +10,6 @@ import RxCocoa
 
 extension Reactive where Base: LIME_iOS.UIViewController {
 
-    /// Bindable sink for `startAnimating()`, `stopAnimating()` methods.
     internal var isLoading: Binder<Bool> {
         return Binder(self.base) { viewcontroller, active in
             if active {

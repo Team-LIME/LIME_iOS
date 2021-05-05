@@ -13,7 +13,18 @@ import ReactorKit
 class RegisterViewController: RegisterInputViewController<UserTypeEnum>, View {
     typealias Reactor = RegisterViewReactor
     
-    // MARK: - properties
+    // MARK: - Object lifecycle
+    
+    init() {
+        super.init(inputType: .type) { _ in }
+        reactor = RegisterViewReactor()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - register Input ViewControllers
     
     lazy var emailInputViewController = RegisterInputViewController<String>(inputType: .email,
                                                                             onClickButtonEvent: { email in
@@ -36,9 +47,10 @@ class RegisterViewController: RegisterInputViewController<UserTypeEnum>, View {
     lazy var introInputViewController = RegisterInputViewController<String>(inputType: .intro,
                                                                             onClickButtonEvent: { intro in
                                                                                 self.intro = intro ?? ""
+                                                                                
                                                                                 if self.type == .teacher {
                                                                                     self.registerRequest()
-                                                                                }else {
+                                                                                } else {
                                                                                     self.routeToGenerationInputView()
                                                                                 }
                                                                             })
@@ -49,7 +61,7 @@ class RegisterViewController: RegisterInputViewController<UserTypeEnum>, View {
                                                                                 self.registerRequest()
                                                                               })
     
-    //MARK: - Propertiess
+    //MARK: - register request data
     var email: String = ""
     var pw: String = ""
     var name: String = ""
@@ -57,17 +69,7 @@ class RegisterViewController: RegisterInputViewController<UserTypeEnum>, View {
     var generation: Int = 0
     var type: UserTypeEnum = .student
     
-    // MARK: - Object lifecycle
-    
-    init() {
-        super.init(inputType: .type) { _ in }
-        reactor = RegisterViewReactor()
-    }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    //MARK: - Rout to Another VC
+    //MARK: - Route to Another VC
     
     func routeToEmailInputView(){
         self.navigationController?.pushViewController(emailInputViewController, animated: true)
@@ -122,7 +124,7 @@ class RegisterViewController: RegisterInputViewController<UserTypeEnum>, View {
         })
     }
     
-    //MARK: - Binding Data
+    //MARK: - Binding
     
     func bind(reactor: RegisterViewReactor) {
         //Output

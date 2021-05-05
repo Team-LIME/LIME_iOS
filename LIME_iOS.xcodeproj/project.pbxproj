@@ -319,8 +319,8 @@
 				0AED01E0263D6DF20071C959 /* Home */,
 				0AED01E3263D6DF20071C959 /* Splash */,
 				0AED01E6263D6DF20071C959 /* Welcome */,
-				0AED01E8263D6DF20071C959 /* Register */,
 				0AED01EB263D6DF20071C959 /* Login */,
+				0AED01E8263D6DF20071C959 /* Register */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
