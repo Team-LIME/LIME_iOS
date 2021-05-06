@@ -5,7 +5,7 @@ import ArgumentParser
 // An outer structure to hold all commands and sub-commands handled by this script.
 struct SwiftScript: ParsableCommand {
 
-    static let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imhha21vaW5AZGdzdy5ocy5rciIsImlhdCI6MTYxODQ4MDYzOCwiZXhwIjoxNjE4OTEyNjM4LCJpc3MiOiJsaW1lIiwic3ViIjoidG9rZW4ifQ.b6QhkVf2V3eeBuKz5KU2gSS6MyDoU-lZiQM5LN8R7ps"
+    static let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3R0ZXN0QGRnc3cuaHMua3IiLCJpYXQiOjE2MTk4NzE5ODMsImV4cCI6MTYyMDMwMzk4MywiaXNzIjoibGltZSIsInN1YiI6InRva2VuIn0.7A0yhXG6o8ZFtWWBXDtdqwlEIzUZJvlVD5jp6bPoFkE"
     
     static var configuration = CommandConfiguration(
             abstract: """

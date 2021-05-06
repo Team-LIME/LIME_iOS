@@ -13,7 +13,7 @@ struct Constants {
     static let GRAPHQL_DEFAULT_URL = "\(SERVER_IP):\(SERVER_PORT)/graphql"
     
     
-    static let SERVER_IP = "http://10.80.163.135"
+    static let SERVER_IP = "http://10.80.161.65"
     static let SERVER_PORT = "3000"
     static let SERVER_VERSION = "v1"
 }

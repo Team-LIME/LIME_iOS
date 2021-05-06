@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/Alamofire/Alamofire.git",
         "state": {
           "branch": null,
-          "revision": "4d19ad82f80cc71ff829b941ded114c56f4f604c",
-          "version": "5.4.2"
+          "revision": "f96b619bcb2383b43d898402283924b80e2c4bae",
+          "version": "5.4.3"
         }
       },
       {
@@ -15,8 +15,17 @@
         "repositoryURL": "https://github.com/apollographql/apollo-ios.git",
         "state": {
           "branch": null,
-          "revision": "d41efb5e670ccc064e636f9b6f6def3abe517e79",
-          "version": "0.42.0"
+          "revision": "c6e2f6c7936ea0dcf2f09319fecedcbac2d03350",
+          "version": "0.43.0"
+        }
+      },
+      {
+        "package": "CryptoSwift",
+        "repositoryURL": "https://github.com/krzyzanowskim/CryptoSwift.git",
+        "state": {
+          "branch": null,
+          "revision": "4e31051c63cc0ddf10a25cf5318856c510cf77f4",
+          "version": "1.4.0"
         }
       },
       {
@@ -26,24 +35,6 @@
           "branch": null,
           "revision": "b1d0099abe36facd198113633f502889842906af",
           "version": "0.0.2"
-        }
-      },
-      {
-        "package": "KeychainAccess",
-        "repositoryURL": "https://github.com/kishikawakatsumi/KeychainAccess.git",
-        "state": {
-          "branch": null,
-          "revision": "84e546727d66f1adc5439debad16270d0fdd04e7",
-          "version": "4.2.2"
-        }
-      },
-      {
-        "package": "Kingfisher",
-        "repositoryURL": "https://github.com/onevcat/Kingfisher.git",
-        "state": {
-          "branch": null,
-          "revision": "bbc4bc4def7eb05a7ba8e1219f80ee9be327334e",
-          "version": "6.2.1"
         }
       },
       {
@@ -60,13 +51,13 @@
         "repositoryURL": "https://github.com/airbnb/lottie-ios.git",
         "state": {
           "branch": null,
-          "revision": "b3c60ba1716baab6faeeb217d8ce1da336f92718",
-          "version": "3.2.1"
+          "revision": "e428f89675588f2fe58891eac5f7c971098cf1a0",
+          "version": "3.2.2"
         }
       },
       {
         "package": "Moya",
-        "repositoryURL": "https://github.com/Moya/Moya.git",
+        "repositoryURL": "https://github.com/moya/moya.git",
         "state": {
           "branch": null,
           "revision": "d27767c3624cc64a45bb371b267b89c92d70c670",
@@ -129,7 +120,7 @@
       },
       {
         "package": "ReactorKit",
-        "repositoryURL": "https://github.com/ReactorKit/ReactorKit",
+        "repositoryURL": "https://github.com/reactorKit/ReactorKit.git",
         "state": {
           "branch": null,
           "revision": "fc392a1dc4c98a496089b8bd091cd92f608fd299",
@@ -141,8 +132,8 @@
         "repositoryURL": "https://github.com/realm/realm-cocoa.git",
         "state": {
           "branch": null,
-          "revision": "ae8e646590396dfc13c1abbf8aa2e48c43766dce",
-          "version": "10.7.2"
+          "revision": "239a6a383af5d4b445626a95aa6356925e6acf22",
+          "version": "10.7.4"
         }
       },
       {
@@ -150,8 +141,8 @@
         "repositoryURL": "https://github.com/realm/realm-core",
         "state": {
           "branch": null,
-          "revision": "bab46acdca91c417a0d4849b8f4992a3c17e29a5",
-          "version": "10.5.5"
+          "revision": "28ed052d10d2245542b4fbdc71d388febb1e9bc4",
+          "version": "10.6.0"
         }
       },
       {

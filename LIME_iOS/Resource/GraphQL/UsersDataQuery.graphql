@@ -1,0 +1,15 @@
+query Users {
+  getOtherUsers{
+    _id
+    profileImages
+    name
+    type
+    intro
+    generation
+  }
+  getMyProfile{
+    profileImages
+    name
+    intro
+  }
+}

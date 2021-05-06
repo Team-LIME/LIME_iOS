@@ -11,6 +11,7 @@ import Moya
 enum AuthAPI {
     case postLogin(_ request: LoginRequest)
     case postRegister(_ request: RegisterRequest)
+    case getTokenInfo(_ token: String)
 }
 
 extension AuthAPI: TargetType {
@@ -25,6 +26,8 @@ extension AuthAPI: TargetType {
             return "/login"
         case .postRegister:
             return "/register"
+        case .getTokenInfo:
+            return ""
         }
     }
     
@@ -34,6 +37,8 @@ extension AuthAPI: TargetType {
             return .post
         case .postRegister:
             return .post
+        case .getTokenInfo:
+            return .get
         }
     }
     
@@ -47,6 +52,8 @@ extension AuthAPI: TargetType {
             return .requestData(try! JSONEncoder().encode(request))
         case let .postRegister(request):
             return .requestData(try! JSONEncoder().encode(request))
+        case .getTokenInfo:
+            return .requestPlain
         }
     }
     
@@ -55,7 +62,14 @@ extension AuthAPI: TargetType {
     }
     
     var headers: [String : String]? {
-        return ["Content-Type": "application/json"]
+        switch self {
+            case .postLogin:
+                return ["Content-Type": "application/json"]
+            case .postRegister:
+                return ["Content-Type": "application/json"]
+            case .getTokenInfo(let token):
+                return ["x-access-token": token]
+        }
     }
 }
 

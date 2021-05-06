@@ -19,7 +19,7 @@ class LoginViewReactor: Reactor {
     }
     
     enum Action {
-        case login(LoginRequest)
+        case login(email: String, pw: String)
     }
     
     enum Mutation {
@@ -37,11 +37,12 @@ class LoginViewReactor: Reactor {
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-            case let .login(loginRequest):
+            case let .login(email, pw):
                 return Observable.concat([
                     .just(Mutation.setLoading(true)),
-                     validate(.login(loginRequest)),
-                    restRepository.login(LoginRequest(email: loginRequest.email, pw: loginRequest.pw))
+                    chekEmpty(.login(email: email, pw: pw)),
+                    validate(.login(email: email, pw: pw)),
+                    restRepository.login(LoginRequest(email: email, pw: pw))
                         .asObservable()
                         .map { Mutation.setSuccessLogin(true) },
                     .just(Mutation.setLoading(false)),
@@ -62,7 +63,7 @@ class LoginViewReactor: Reactor {
                    case let .error(message, _, _) = error {
                     state.errorMessage = message
                 } else {
-                    state.errorMessage = "알수없는 오류가 발생했습니다."
+                    state.errorMessage = "알수없는 오류가 발생했습니다 : \(error.localizedDescription)"
                 }
                 state.isLoading = false
                 state.isSuccessLogin = false
@@ -73,13 +74,23 @@ class LoginViewReactor: Reactor {
 }
 
 extension LoginViewReactor {
+    private func chekEmpty(_ action: Action) -> Observable<Mutation> {
+        switch action {
+            case let .login(email, pw):
+                if(email.isEmpty) {
+                    return .error(LimeError.error(message: "이메일을 입력해 주세요."))
+                } else if(pw.isEmpty) {
+                    return .error(LimeError.error(message: "비밀번호를 입력해 주세요."))
+                }
+        }
+        return Observable.just(Void()).map{ Mutation.non }
+    }
+    
     private func validate(_ action: Action) -> Observable<Mutation> {
         switch action {
-            case let .login(loginRequest):
-                if(loginRequest.email.isEmpty) {
-                    return .error(LimeError.error(message: "아이디를 입력해 주세요."))
-                } else if(loginRequest.pw.isEmpty) {
-                    return .error(LimeError.error(message: "비밀번호를 입력해 주세요."))
+            case let .login(email, _    ):
+                if(!email.isValidEmail()) {
+                    return .error(LimeError.error(message: "올바른 이메일을 입력해 주세요."))
                 }
         }
         return Observable.just(Void()).map{ Mutation.non }

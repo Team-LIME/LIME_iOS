@@ -1,0 +1,10 @@
+{
+  "4ed36e099988c8b133cba2dbac6b1e7fb0bbb429e00fd8a63f2063f82e05ae00": {
+    "name": "ChatRooms",
+    "source": "query ChatRooms {\n  getChatRooms {\n    __typename\n    _id\n    participants {\n      __typename\n      profileImages\n    }\n    name\n    type\n  }\n}"
+  },
+  "f495cee096d57163a9301c3f90394d5f7c1ab620849be12644882a85309caf76": {
+    "name": "Users",
+    "source": "query Users {\n  getOtherUsers {\n    __typename\n    _id\n    profileImages\n    name\n    type\n    intro\n    generation\n  }\n  getMyProfile {\n    __typename\n    profileImages\n    name\n    intro\n  }\n}"
+  }
+}
