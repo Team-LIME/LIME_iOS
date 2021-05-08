@@ -11,11 +11,13 @@ import RxCocoa
 
 class SplashViewReactor: Reactor {
     var initialState: State
+    var authRepository: AuthRepository
     
-    lazy var restRepository = RestRepository.shared
-    
-    init() {
-        self.initialState = State(isTokenActive: false,
+    init(authRepository: AuthRepository) {
+        self.authRepository = authRepository
+        
+        //TODO: 수정필요
+        self.initialState = State(isTokenActive: true,
                                   isLoading: false)
         
     }
@@ -42,7 +44,7 @@ class SplashViewReactor: Reactor {
             case .refresh:
                 return Observable.concat([
                     .just(Mutation.setLoading(true)),
-                    restRepository.fetchTokenStatus()
+                    authRepository.fetchTokenStatus()
                         .asObservable()
                         .map { Mutation.setIsTokenActive($0) },
                     .just(Mutation.setLoading(false))

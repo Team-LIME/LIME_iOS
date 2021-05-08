@@ -11,9 +11,10 @@ import RxCocoa
 
 class LoginViewReactor: Reactor {
     var initialState: State
-    lazy var restRepository = RestRepository.shared
+    var authRepository: AuthRepository
     
-    init() {
+    init(authRepository: AuthRepository) {
+        self.authRepository = authRepository
         self.initialState = State(isSuccessLogin: false,
                                   isLoading: false)
     }
@@ -42,7 +43,7 @@ class LoginViewReactor: Reactor {
                     .just(Mutation.setLoading(true)),
                     chekEmpty(.login(email: email, pw: pw)),
                     validate(.login(email: email, pw: pw)),
-                    restRepository.login(LoginRequest(email: email, pw: pw))
+                    authRepository.login(LoginRequest(email: email, pw: pw))
                         .asObservable()
                         .map { Mutation.setSuccessLogin(true) },
                     .just(Mutation.setLoading(false)),

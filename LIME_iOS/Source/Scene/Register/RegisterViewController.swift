@@ -17,7 +17,7 @@ class RegisterViewController: RegisterInputViewController<UserTypeEnum>, View {
     
     init() {
         super.init(inputType: .type) { _ in }
-        reactor = RegisterViewReactor()
+        reactor = RegisterViewReactor(authRepository: AuthRepository())
     }
     
     required init?(coder: NSCoder) {

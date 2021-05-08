@@ -38,6 +38,15 @@
         }
       },
       {
+        "package": "Kingfisher",
+        "repositoryURL": "https://github.com/onevcat/Kingfisher.git",
+        "state": {
+          "branch": null,
+          "revision": "44450a8f564d7c0165f736ba2250649ff8d3e556",
+          "version": "6.3.0"
+        }
+      },
+      {
         "package": "Logger",
         "repositoryURL": "https://github.com/shibapm/Logger",
         "state": {
@@ -155,6 +164,15 @@
         }
       },
       {
+        "package": "RxDataSources",
+        "repositoryURL": "https://github.com/RxSwiftCommunity/RxDataSources.git",
+        "state": {
+          "branch": null,
+          "revision": "a18cee01c9ee55f04d0c7eb15c77a96c3648c88e",
+          "version": "4.0.1"
+        }
+      },
+      {
         "package": "RxExpect",
         "repositoryURL": "https://github.com/devxoul/RxExpect.git",
         "state": {
@@ -170,6 +188,15 @@
           "branch": null,
           "revision": "254617dd7fae0c45319ba5fbea435bf4d0e15b5d",
           "version": "5.1.2"
+        }
+      },
+      {
+        "package": "RxViewController",
+        "repositoryURL": "https://github.com/devxoul/RxViewController.git",
+        "state": {
+          "branch": null,
+          "revision": "2974fc02742497ee26ba3622ced199818d580444",
+          "version": "1.0.0"
         }
       },
       {

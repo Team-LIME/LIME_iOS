@@ -17,7 +17,7 @@ class LoginViewController: LIME_iOS.UIViewController, View, UIGestureRecognizerD
     
     init() {
         super.init(nibName: nil, bundle: nil)
-        reactor = LoginViewReactor()
+        reactor = LoginViewReactor(authRepository: AuthRepository())
     }
     
     required init?(coder: NSCoder) {
@@ -147,7 +147,7 @@ class LoginViewController: LIME_iOS.UIViewController, View, UIGestureRecognizerD
     
     private func routeToHomeView() {
         DispatchQueue.main.async {
-            let destinationVC = UINavigationController(rootViewController: HomeViewController()).then {
+            let destinationVC = HomeViewController().then {
                 $0.modalPresentationStyle = .fullScreen
             }
             self.present(destinationVC, animated: false)

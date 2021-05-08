@@ -1,15 +1,17 @@
 //
-//  ViewController.swift
+//  UITabBarController.swift
 //  LIME_iOS
 //
-//  Created by 이영은 on 2021/04/15.
+//  Created by 이영은 on 2021/05/06.
 //
 
 import UIKit
-import RxSwift
+import Then
+import SnapKit
+import ReactorKit
 import Lottie
 
-class UIViewController: UIKit.UIViewController {
+class UITabBarController: UIKit.UITabBarController {
     
     //MARK: Properties
     var disposeBag = DisposeBag()
@@ -119,15 +121,6 @@ class UIViewController: UIKit.UIViewController {
             }
         }
         
-        if (isHideDivider) {
-            self.navigationController?.navigationBar.shadowImage = UIImage()
-        }else {
-            self.navigationController?.navigationBar.shadowImage = nil
-        }
-    }
-    
-    func navigationBarSettings(_ isHideDivider: Bool = false) {
-        self.navigationController?.navigationBar.barTintColor = .white
         if (isHideDivider) {
             self.navigationController?.navigationBar.shadowImage = UIImage()
         }else {

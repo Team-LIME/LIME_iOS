@@ -9,6 +9,8 @@ import UIKit
 import Then
 import SnapKit
 import ReactorKit
+import RxCocoa
+import RxViewController
 
 class SplashViewController: LIME_iOS.UIViewController, View {
     typealias Reactor = SplashViewReactor
@@ -17,7 +19,7 @@ class SplashViewController: LIME_iOS.UIViewController, View {
     
     init() {
         super.init(nibName: nil, bundle: nil)
-        self.reactor = SplashViewReactor()
+        self.reactor = SplashViewReactor(authRepository: AuthRepository())
     }
     
     required init?(coder: NSCoder) {
@@ -37,7 +39,7 @@ class SplashViewController: LIME_iOS.UIViewController, View {
     
     fileprivate func routeToHomeView() {
         DispatchQueue.main.async {
-            let destinationVC = UINavigationController(rootViewController: HomeViewController()).then {
+            let destinationVC = HomeViewController().then {
                 $0.modalPresentationStyle = .fullScreen
             }
             self.present(destinationVC, animated: false)
@@ -48,30 +50,32 @@ class SplashViewController: LIME_iOS.UIViewController, View {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        Observable.just(.refresh)
-            .bind(to: reactor!.action)
-            .disposed(by: disposeBag)
     }
     
     //MARK: - Binding
     
     func bind(reactor: SplashViewReactor) {
+        //Input
+        self.rx.viewDidLoad
+            .map { .refresh }
+            .bind(to: reactor.action)
+            .disposed(by: self.disposeBag)
+
         //Output
         reactor.state.map { $0.isTokenActive }
             .distinctUntilChanged()
             .bind(to: self.rx.isTokenActive)
-            .disposed(by: disposeBag)
-        
+            .disposed(by: self.disposeBag)
+
         reactor.state.map { $0.isLoading }
             .distinctUntilChanged()
             .bind(to: self.rx.isLoading)
-            .disposed(by: disposeBag)
-        
+            .disposed(by: self.disposeBag)
+
         //Error
         reactor.state.map{ $0.errorMessage }
             .bind(to: self.view.rx.toastMessage)
-            .disposed(by: disposeBag)
+            .disposed(by: self.disposeBag)
     }
     
 }

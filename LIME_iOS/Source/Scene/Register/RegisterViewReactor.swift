@@ -12,9 +12,10 @@ import RxCocoa
 class RegisterViewReactor: Reactor {
     var initialState: State
     
-    lazy var restRepository = RestRepository.shared
+    var authRepository: AuthRepository
     
-    init() {
+    init(authRepository: AuthRepository) {
+        self.authRepository = authRepository
         self.initialState = State(isSuccessRegister: false,
                                   isLoading: false)
     }
@@ -43,7 +44,7 @@ class RegisterViewReactor: Reactor {
             case let .register(email, pw, name, intro, generation, type):
                 return Observable.concat([
                     .just(Mutation.setLoading(true)),
-                    restRepository.register(RegisterRequest(email: email,
+                    authRepository.register(RegisterRequest(email: email,
                                                             pw: pw,
                                                             name: name,
                                                             intro: intro,
